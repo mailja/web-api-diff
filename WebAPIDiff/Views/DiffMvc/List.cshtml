@@ -1,0 +1,58 @@
+﻿@using WebAPIDiff.Domain.Entities
+@model IEnumerable<Diff>
+
+@{
+    ViewBag.Title = "Diffs";
+}
+
+<h2>Diff list</h2>
+
+<table class = "table table-condensed table-bordered">
+  <tbody>
+    @foreach (var p in Model)
+    {
+      <tr>
+        <td class="text-right">
+          <label>DiffId :</label>
+        </td>
+        <td class="text-left">
+          <h4>
+            @p.DiffId.ToString()
+          </h4>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="text-right">
+          <label>Left :</label>
+        </td>
+        <td class="text-left">
+          <h4>
+            @p.LeftData
+          </h4>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="text-right">
+          <label>Right :</label>
+        </td>
+        <td class="text-left">
+          <h4>
+            @p.RightData
+          </h4>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-right">
+          <label>-------------</label>
+        </td>
+        <td class="text-left">
+          <label>-------------</label>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+

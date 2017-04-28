@@ -240,3 +240,23 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/WebAPIDiff/Content/bootstrap.min.css.map
+/WebAPIDiff/Content/bootstrap.min.css
+/WebAPIDiff/Content/bootstrap.css.map
+/WebAPIDiff/Content/bootstrap.css
+/WebAPIDiff/Content/bootstrap-theme.min.css.map
+/WebAPIDiff/Content/bootstrap-theme.min.css
+/WebAPIDiff/Content/bootstrap-theme.css.map
+/WebAPIDiff/Content/bootstrap-theme.css
+/WebAPIDiff/fonts/glyphicons-halflings-regular.woff2
+/WebAPIDiff/fonts/glyphicons-halflings-regular.woff
+/WebAPIDiff/fonts/glyphicons-halflings-regular.ttf
+/WebAPIDiff/fonts/glyphicons-halflings-regular.svg
+/WebAPIDiff/fonts/glyphicons-halflings-regular.eot
+/WebAPIDiff/Scripts/modernizr-2.6.2.js
+/WebAPIDiff/Scripts/jquery-2.2.4.min.map
+/WebAPIDiff/Scripts/jquery-2.2.4.min.js
+/WebAPIDiff/Scripts/jquery-2.2.4.js
+/WebAPIDiff/Scripts/jquery-2.2.4.intellisense.js
+/WebAPIDiff/Scripts/bootstrap.min.js
+/WebAPIDiff/Scripts/bootstrap.js

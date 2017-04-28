@@ -15,8 +15,8 @@ namespace WebAPIDiff
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "{controller}/{action}/{diffId}",
+                defaults: new { controller = "DiffMvc", action = "List", diffId = UrlParameter.Optional }
             );
         }
     }
