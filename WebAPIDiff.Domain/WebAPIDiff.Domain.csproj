@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDiffRepository.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Entities\Diff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

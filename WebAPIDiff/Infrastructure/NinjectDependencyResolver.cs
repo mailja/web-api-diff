@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using System.Web.WebPages;
 using Moq;
 using Ninject;
+using Ninject.Web.Common;
+using WebAPIDiff.DataAccess.Sql.Concrete;
 using WebAPIDiff.Domain.Abstract;
 using WebAPIDiff.Domain.Entities;
 
@@ -40,7 +42,7 @@ namespace WebAPIDiff.Infrastructure
       if (isMockBinding)
       {
         Mock<IDiffRepository> mock = new Mock<IDiffRepository>();
-        mock.Setup(m => m.Diffs).Returns(new List<Diff>
+        mock.Setup(m => m.Diffs).Returns(new List <Diff>
         {
           new Diff {DiffId = 1, LeftData = null, RightData = null},
           new Diff {DiffId = 2, LeftData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA==", RightData = null},
@@ -53,8 +55,8 @@ namespace WebAPIDiff.Infrastructure
         _kernel.Bind<IDiffRepository>().ToConstant(mock.Object);
       } else
       {
-        //_kernel.Bind<EfDbContext>().To<EfDbContext>().InRequestScope();
-        //_kernel.Bind<IDiffRepository>().To<EfDiffRepository>().InRequestScope();
+        _kernel.Bind<DiffDbContext>().To<DiffDbContext>().InRequestScope();
+        _kernel.Bind<IDiffRepository>().To<EfDiffRepository>().InRequestScope();
       }
     }
   }

@@ -27,7 +27,8 @@ namespace WebAPIDiff.Controllers
     public IHttpActionResult GetDiff(int diffId)
     {
 
-      var result = _diffRepository.Diffs.FirstOrDefault(p => p.DiffId == diffId);
+      var result = _diffRepository.GetDiffs()
+        .FirstOrDefault(p => p.DiffId == diffId);
 
       if (result?.LeftData == null || result?.RightData == null)
       {
@@ -99,30 +100,43 @@ namespace WebAPIDiff.Controllers
     public async Task<IHttpActionResult> PutDiff(int diffId, string side, [FromBody] DiffPutModel model)
     {
 
-      if (model?.Data == null || diffId <= 0)
+      try
       {
-        return BadRequest();
+        if (model?.Data == null || diffId <= 0)
+        {
+          return BadRequest();
+        }
+
+        // Instantiate object to create or update
+        Diff diff = new Diff()
+        {
+          DiffId = diffId
+        };
+
+        if (side.ToLower() == "left")
+        {
+          diff.LeftData = model?.Data.Trim() ?? null;
+        }
+        if (side.ToLower() == "right")
+        {
+          diff.RightData = model?.Data.Trim() ?? null;
+        }
+
+        // Save object 
+        var result = await _diffRepository.SaveDiffAsync(diff);
+
+        if (result > 0)
+        {
+          return StatusCode(HttpStatusCode.Created);
+        } else
+        {
+          return BadRequest("Could not save to the database.");
+        }
       }
-
-      // Instantiate object to create or update
-      Diff diff = new Diff()
+      catch (Exception e)
       {
-        DiffId = diffId
-      };
-
-      if (side.ToLower() == "left")
-      {
-        diff.LeftData = model?.Data.Trim() ?? null;
+        return BadRequest(e.Message);
       }
-      if (side.ToLower() == "right")
-      {
-        diff.RightData = model?.Data.Trim() ?? null;
-      }
-
-      //await _diffRepository.SaveProductAsync(diff);
-
-      return StatusCode(HttpStatusCode.Created);
-      //return BadRequest(ModelState);
 
     }
   }
