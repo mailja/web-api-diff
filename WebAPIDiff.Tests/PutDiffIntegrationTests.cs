@@ -12,6 +12,7 @@ using System.Web.Http.Hosting;
 using System.Web.Http.Routing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using WebAPIDiff.Controllers;
 using WebAPIDiff.DataAccess.Sql.Concrete;
 using WebAPIDiff.Domain.Abstract;
@@ -29,20 +30,6 @@ namespace WebAPIDiff.Tests
     public void Init() {
 
       // Arrange
-      var mock = new Mock<IDiffRepository>();
-      mock.Setup(d => d.GetDiffs()).Returns(new List<Diff>()
-      {
-        new Diff {DiffId = 1, LeftData = null, RightData = null},
-        new Diff {DiffId = 2, LeftData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA==", RightData = null},
-        new Diff {DiffId = 3, LeftData = null, RightData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA=="},
-        new Diff {DiffId = 4, LeftData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA==", RightData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA=="},
-        new Diff {DiffId = 5, LeftData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA==", RightData = "TGVwIHBvemRyYXYgMzU1"},
-        new Diff {DiffId = 6, LeftData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA==", RightData = "TGVwIG9kemRyYXYgaXogZGFsamF2IDM1NQ=="},
-        new Diff {DiffId = 7, LeftData = "", RightData = ""},
-
-      }
-      .AsQueryable());
-
       var context = new DiffDbContext();
       var repository = new EfDiffRepository(context);
       _ctrl = new DiffController(repository);
@@ -93,7 +80,11 @@ namespace WebAPIDiff.Tests
     [TestMethod]
     public void PutDiff_DataFieldValid_StatusCreated() {
       // Arange
-      var modelPut = new DiffPutModel()
+      var modelPutLeft = new DiffPutModel()
+      {
+        Data = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA=="
+      };
+      var modelPutRight = new DiffPutModel()
       {
         Data = "TGVwIHBvemRyYXYgMzU1"
       };
@@ -106,19 +97,23 @@ namespace WebAPIDiff.Tests
       var cleanLeft = _ctrl.PutDiff(999, "left", modelClean).Result.ExecuteAsync(CancellationToken.None);
       var cleanRight = _ctrl.PutDiff(999, "right", modelClean).Result.ExecuteAsync(CancellationToken.None);
 
-      var resultLeft = _ctrl.PutDiff(999, "left", modelPut).Result.ExecuteAsync(CancellationToken.None);
-      var resultRight = _ctrl.PutDiff(999, "right", modelPut).Result.ExecuteAsync(CancellationToken.None);
+      var resultLeft = _ctrl.PutDiff(999, "left", modelPutLeft).Result.ExecuteAsync(CancellationToken.None);
+      var resultRight = _ctrl.PutDiff(999, "right", modelPutRight).Result.ExecuteAsync(CancellationToken.None);
 
-      var resultGet = _ctrl.GetDiff(4).ExecuteAsync(CancellationToken.None);
+      var resultGet = _ctrl.GetDiff(999).ExecuteAsync(CancellationToken.None);
 
       cleanLeft = _ctrl.PutDiff(999, "left", modelClean).Result.ExecuteAsync(CancellationToken.None);
       cleanRight = _ctrl.PutDiff(999, "right", modelClean).Result.ExecuteAsync(CancellationToken.None);
 
       // Assert
       var statusCodeGet = resultGet.Result.StatusCode;
+      var json = resultGet.Result.Content.ReadAsStringAsync().Result;
+      var diffModel = JsonConvert.DeserializeObject<DiffResultModel>(json);
+      Assert.IsTrue(statusCodeGet == HttpStatusCode.OK);
+      Assert.IsTrue(diffModel.DiffResultType == "SizeDoNotMatch");
+
       var statusCodeLeft = resultLeft.Result.StatusCode;
       var statusCodeRight = resultRight.Result.StatusCode;
-      Assert.IsTrue(statusCodeGet == HttpStatusCode.OK);
       Assert.IsTrue(statusCodeLeft == HttpStatusCode.Created);
       Assert.IsTrue(statusCodeRight == HttpStatusCode.Created);
     }
