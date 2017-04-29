@@ -23,7 +23,7 @@ namespace WebAPIDiff
         name: "Diffs",
         routeTemplate: "v1/{controller}/{diffId}/{side}",
         defaults: new {controller = "Diff", diffId = RouteParameter.Optional, side = RouteParameter.Optional},
-        constraints: new { side = "^left$|^right$|^$" }
+        constraints: new { side = "^left$|^right$|^$", diffId = @"\d+" }
         );
 
       config.Formatters.Remove(config.Formatters.XmlFormatter);

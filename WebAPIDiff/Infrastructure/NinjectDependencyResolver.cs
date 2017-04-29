@@ -41,7 +41,7 @@ namespace WebAPIDiff.Infrastructure
 
       if (isMockBinding)
       {
-        Mock<IDiffRepository> mock = new Mock<IDiffRepository>();
+        var mock = new Mock<IDiffRepository>();
         mock.Setup(m => m.Diffs).Returns(new List <Diff>
         {
           new Diff {DiffId = 1, LeftData = null, RightData = null},
