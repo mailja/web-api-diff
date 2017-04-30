@@ -36,7 +36,7 @@ namespace WebAPIDiff.Controllers
     }
 
     /// <summary>
-    /// Result of decoded (from 64bit encoded) data pair comparison is returned.
+    /// Result of decoded (from Base64 encoded) data pair comparison is returned.
     /// </summary>
     /// <param name="diffId">Id field used to retrieve data from storage.</param>
     /// <returns></returns>
