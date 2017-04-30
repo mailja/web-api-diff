@@ -42,7 +42,7 @@ namespace WebAPIDiff.Infrastructure
       if (isMockBinding)
       {
         var mock = new Mock<IDiffRepository>();
-        mock.Setup(m => m.Diffs).Returns(new List <Diff>
+        mock.Setup(m => m.GetDiffs()).Returns(new List <Diff>
         {
           new Diff {DiffId = 1, LeftData = null, RightData = null},
           new Diff {DiffId = 2, LeftData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA==", RightData = null},
@@ -51,7 +51,8 @@ namespace WebAPIDiff.Infrastructure
           new Diff {DiffId = 5, LeftData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA==", RightData = "TGVwIHBvemRyYXYgMzU1"},
           new Diff {DiffId = 6, LeftData = "TGVwIHBvemRyYXYgaXogZGFsamF2IDIzNA==", RightData = "TGVwIG9kemRyYXYgaXogZGFsamF2IDM1NQ=="},
           new Diff {DiffId = 7, LeftData = "", RightData = ""},
-        });
+        }
+        .AsQueryable());
         _kernel.Bind<IDiffRepository>().ToConstant(mock.Object);
       } else
       {

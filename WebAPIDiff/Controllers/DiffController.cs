@@ -23,6 +23,11 @@ namespace WebAPIDiff.Controllers
       _diffRepository = diffRepository;
     }
 
+    /// <summary>
+    /// Result of decoded (from 64bit encoded) data pair comparison is returned.
+    /// </summary>
+    /// <param name="diffId">Id field used to retrieve data from storage.</param>
+    /// <returns></returns>
     [HttpGet]
     public IHttpActionResult GetDiff(int diffId)
     {
@@ -96,6 +101,13 @@ namespace WebAPIDiff.Controllers
       return Ok(diffResultModel);
     }
 
+    /// <summary>
+    /// Create new entity (if new diffId is provided) or update one side (left/right) for existing.
+    /// </summary>
+    /// <param name="diffId">Id field serving as primary key in data storage.</param>
+    /// <param name="side">Denotation of storage field (left or right). Just one at a time.</param>
+    /// <param name="model">JSON formated object containing data to store.</param>
+    /// <returns></returns>
     [HttpPut]
     public async Task<IHttpActionResult> PutDiff(int diffId, string side, [FromBody] DiffPutModel model)
     {
@@ -128,7 +140,8 @@ namespace WebAPIDiff.Controllers
         if (result > 0)
         {
           return StatusCode(HttpStatusCode.Created);
-        } else
+        }
+        else
         {
           return BadRequest("Could not save to the database.");
         }

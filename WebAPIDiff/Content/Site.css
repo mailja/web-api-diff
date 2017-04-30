@@ -16,3 +16,4 @@ textarea {
     max-width: 280px;
 }
 
+#diff-list tr:nth-of-type(4n+4) { background-color: hsla(188, 100%, 50%, 0.42); }

@@ -5,6 +5,7 @@ using System.Web;
 
 namespace WebAPIDiff.Models
 {
+  
   public class DiffResultWithItemsModel
   {
     public string DiffResultType { get; set; }

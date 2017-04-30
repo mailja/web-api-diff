@@ -50,7 +50,7 @@ namespace WebAPIDiff.Tests
 
         RegisterServices(kernel);
 
-        // Web api spcific
+        // Web api specific
         GlobalConfiguration.Configuration.DependencyResolver =
           new NinjectResolver(kernel);
 

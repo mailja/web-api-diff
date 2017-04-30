@@ -5,53 +5,45 @@
     ViewBag.Title = "Diffs";
 }
 
-<h2>Diff list</h2>
+<h2>List of base64 encoded data pairs</h2>
 
-<table class = "table table-condensed table-bordered">
+<table id="diff-list" class="table table-condensed table-bordered">
   <tbody>
-    @foreach (var p in Model)
-    {
-      <tr>
-        <td class="text-right">
-          <label>DiffId :</label>
-        </td>
-        <td class="text-left">
-          <h4>
-            @p.DiffId.ToString()
-          </h4>
-        </td>
-      </tr>
+  @foreach (var p in Model)
+  {
+    <tr>
+      <td class="text-right">
+        <b>Id :</b>
+      </td>
+      <td class="text-left">
+        @p.DiffId.ToString()
+      </td>
+    </tr>
 
-      <tr>
-        <td class="text-right">
-          <label>Left :</label>
-        </td>
-        <td class="text-left">
-          <h4>
-            @p.LeftData
-          </h4>
-        </td>
-      </tr>
+    <tr>
+      <td class="text-right">
+        <label>Left :</label>
+      </td>
+      <td class="text-left">
+        @p.LeftData
+      </td>
+    </tr>
 
-      <tr>
-        <td class="text-right">
-          <label>Right :</label>
-        </td>
-        <td class="text-left">
-          <h4>
-            @p.RightData
-          </h4>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-right">
-          <label>-------------</label>
-        </td>
-        <td class="text-left">
-          <label>-------------</label>
-        </td>
-      </tr>
-    }
+    <tr>
+      <td class="text-right">
+        <label>Right :</label>
+      </td>
+      <td class="text-left">
+        @p.RightData
+      </td>
+    </tr>
+    <tr>
+      <td class="text-right">
+      </td>
+      <td class="text-left">
+      </td>
+    </tr>
+  }
   </tbody>
 </table>
 

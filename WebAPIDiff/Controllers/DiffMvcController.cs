@@ -20,9 +20,10 @@ namespace WebAPIDiff.Controllers
 
     #region Queries and Lists
 
+    [HttpGet]
     // GET: DiffMvc
     public ActionResult List() {
-      return View(_diffRepository.Diffs);
+      return View(_diffRepository.GetDiffs().ToList());
     }
 
     #endregion
