@@ -8,19 +8,31 @@ using System.Web.Http;
 using Castle.Core.Internal;
 using WebAPIDiff.Domain.Abstract;
 using WebAPIDiff.Domain.Entities;
+using WebAPIDiff.Domain.Services;
 using WebAPIDiff.Models;
 
 namespace WebAPIDiff.Controllers
 {
+  /// <summary>
+  /// Web API providing appropriate http endpoins.
+  /// </summary>
   public class DiffController : ApiController
   {
     private IDiffRepository _diffRepository;
+    private DiffService _diffService;
+    private ModelFactory _modelFactory;
 
+    /// <summary>
+    /// Dependency Injection Container used for decoupling (testability etc.)
+    /// </summary>
+    /// <param name="diffRepository">Constructor injected repository.</param>
     public DiffController(IDiffRepository diffRepository)
     {
       if (diffRepository == null) throw new ArgumentNullException(nameof(diffRepository));
 
       _diffRepository = diffRepository;
+      _diffService = new DiffService(_diffRepository);
+      _modelFactory = new ModelFactory();
     }
 
     /// <summary>
@@ -31,72 +43,15 @@ namespace WebAPIDiff.Controllers
     [HttpGet]
     public IHttpActionResult GetDiff(int diffId)
     {
+      var diffPair = _diffService.GetDiff(diffId);
 
-      var result = _diffRepository.GetDiffs()
-        .FirstOrDefault(p => p.DiffId == diffId);
-
-      if (result?.LeftData == null || result?.RightData == null)
+      if (diffPair?.LeftData == null || diffPair?.RightData == null)
       {
         return NotFound();
       }
 
-      // Initialize result elements
-      var diffResultType = "Equals";
-      var diffs = new List<DiffResultItemModel>();
-
-      // Decoded content
-      var leftContent = Convert.FromBase64String(result.LeftData.Trim());
-      var rightContent = Convert.FromBase64String(result.RightData.Trim());
-
-      // Comparing decoded content and not Base64 encoded data
-      if (leftContent.Length != rightContent.Length)
-      {
-        diffResultType = "SizeDoNotMatch";
-      }
-      else
-      {
-        // Identifying the diffs
-        for (int i = 0; i < leftContent.Length; i++)
-        {
-          if (leftContent[i] != rightContent[i])
-          {
-            diffResultType = "ContentDoNotMatch";
-            var diff = new DiffResultItemModel()
-            {
-              Offset = i,
-              Length = 0
-            };
-            // How long is the Diff
-            while (leftContent[i] != rightContent[i])
-            {
-              diff.Length ++;
-              i++;
-              // Since the size is eqal any field will do
-              if (i >= leftContent.Length)
-              {
-                break;
-              }
-            }
-            diffs.Add(diff);
-          }
-        }
-      }
-
-      // Two different result models required in specification
-      if (diffs.Count > 0)
-      {
-        var diffResultWithItemsModel = new DiffResultWithItemsModel
-        {
-          DiffResultType = diffResultType,
-          Diffs = diffs
-        };
-        return Ok(diffResultWithItemsModel);
-      }
-
-      var diffResultModel = new DiffResultModel
-      {
-        DiffResultType = diffResultType
-      };
+      // Compare pair and create result
+      var diffResultModel = _modelFactory.CompareDiffPair(diffPair);
 
       return Ok(diffResultModel);
     }
@@ -120,24 +75,12 @@ namespace WebAPIDiff.Controllers
         }
 
         // Instantiate object to create or update
-        Diff diff = new Diff()
-        {
-          DiffId = diffId
-        };
-
-        if (side.ToLower() == "left")
-        {
-          diff.LeftData = model?.Data.Trim() ?? null;
-        }
-        if (side.ToLower() == "right")
-        {
-          diff.RightData = model?.Data.Trim() ?? null;
-        }
+        var diff = _modelFactory.CreateDiff(diffId, side, model);
 
         // Save object 
-        var result = await _diffRepository.SaveDiffAsync(diff);
+        var saveResult = await _diffService.SaveDiff(diff);
 
-        if (result > 0)
+        if (saveResult > 0)
         {
           return StatusCode(HttpStatusCode.Created);
         }

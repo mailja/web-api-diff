@@ -227,6 +227,8 @@
     <Compile Include="Models\DiffResultItemModel.cs" />
     <Compile Include="Models\DiffResultModel.cs" />
     <Compile Include="Models\DiffResultWithItemsModel.cs" />
+    <Compile Include="Models\IDiffResultModel.cs" />
+    <Compile Include="Models\ModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

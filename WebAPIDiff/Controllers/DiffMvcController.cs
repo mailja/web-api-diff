@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebAPIDiff.Domain.Abstract;
+using WebAPIDiff.Domain.Services;
 
 namespace WebAPIDiff.Controllers
 {
@@ -23,7 +24,12 @@ namespace WebAPIDiff.Controllers
     [HttpGet]
     // GET: DiffMvc
     public ActionResult List() {
-      return View(_diffRepository.GetDiffs().ToList());
+      var diffService = new DiffService(_diffRepository);
+
+      var diffList = diffService.GetDiffs().ToList();
+
+      //_diffRepository.GetDiffs().ToList()
+      return View(diffList);
     }
 
     #endregion

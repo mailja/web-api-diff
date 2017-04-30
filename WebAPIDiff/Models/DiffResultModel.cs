@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebAPIDiff.Models
 {
-  public class DiffResultModel
+  public class DiffResultModel : IDiffResultModel
   {
     public string DiffResultType { get; set; }
   }

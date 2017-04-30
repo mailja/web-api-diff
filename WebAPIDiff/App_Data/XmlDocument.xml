@@ -503,6 +503,17 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:WebAPIDiff.Controllers.DiffController">
+            <summary>
+            Web API providing appropriate http endpoins.
+            </summary>
+        </member>
+        <member name="M:WebAPIDiff.Controllers.DiffController.#ctor(WebAPIDiff.Domain.Abstract.IDiffRepository)">
+            <summary>
+            Dependency Injection Container used for decoupling (testability etc.)
+            </summary>
+            <param name="diffRepository">Constructor injected repository.</param>
+        </member>
         <member name="M:WebAPIDiff.Controllers.DiffController.GetDiff(System.Int32)">
             <summary>
             Result of decoded (from 64bit encoded) data pair comparison is returned.
@@ -528,6 +539,37 @@
             <summary>
             Field containing Base64 encoded binary data. Length is limited to 500 characters.
             </summary>
+        </member>
+        <member name="T:WebAPIDiff.Models.IDiffResultModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebAPIDiff.Models.IDiffResultModel.DiffResultType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:WebAPIDiff.Models.ModelFactory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebAPIDiff.Models.ModelFactory.CreateDiff(System.Int32,System.String,WebAPIDiff.Models.DiffPutModel)">
+            <summary>
+            
+            </summary>
+            <param name="diffId"></param>
+            <param name="side"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebAPIDiff.Models.ModelFactory.CompareDiffPair(WebAPIDiff.Domain.Entities.Diff)">
+            <summary>
+            
+            </summary>
+            <param name="diffPair"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

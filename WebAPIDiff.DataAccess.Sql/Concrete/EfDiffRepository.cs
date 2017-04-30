@@ -18,26 +18,25 @@ namespace WebAPIDiff.DataAccess.Sql.Concrete
 
     public async Task<int> SaveDiffAsync(Diff diff)
     {
-      if (diff.DiffId > 0)
-      {
-        var dbEntry = GetDiffs()
-          .SingleOrDefault(d => d.DiffId == diff.DiffId);
+      if (diff.DiffId <= 0) return await _context.SaveChangesAsync();
 
-        if (dbEntry != null)
+      var dbEntry = GetDiffs()
+        .SingleOrDefault(d => d.DiffId == diff.DiffId);
+
+      if (dbEntry != null)
+      {
+        if (diff.LeftData != null)
         {
-          if (diff.LeftData != null)
-          {
-            dbEntry.LeftData = diff.LeftData;
-          }
-          if (diff.RightData != null)
-          {
-            dbEntry.RightData = diff.RightData;
-          }
+          dbEntry.LeftData = diff.LeftData;
         }
-        else
+        if (diff.RightData != null)
         {
-          _context.Diffs.Add(diff);
+          dbEntry.RightData = diff.RightData;
         }
+      }
+      else
+      {
+        _context.Diffs.Add(diff);
       }
 
       return await _context.SaveChangesAsync();

@@ -44,6 +44,7 @@
     <Compile Include="Abstract\IDiffRepository.cs" />
     <Compile Include="Entities\Diff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DiffService.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
